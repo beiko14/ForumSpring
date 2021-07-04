@@ -1,4 +1,4 @@
-package com.example.demo.model.config;
+package com.example.demo.config;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
