@@ -4,13 +4,16 @@ package com.example.demo.service;
 
 import com.example.demo.controller.dto.RegisterRequest;
 import com.example.demo.model.User;
+import com.example.demo.model.VerificationToken;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.VerificationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +21,7 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
 
     //create user and map data from RegisterRequest-object to User-object
     @Transactional
@@ -29,5 +33,17 @@ public class AuthService {
         user.setCreated(Instant.now());
         user.setEnabled(false);
         userRepository.save(user);
+
+        String randomToken = generateVerificationToken(user);
+    }
+
+    private String generateVerificationToken(User user) {
+        String randomToken = UUID.randomUUID().toString();
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setToken(randomToken);
+        verificationToken.setUser(user);
+
+        verificationTokenRepository.save(verificationToken);
+        return randomToken;
     }
 }
