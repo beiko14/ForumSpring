@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthControllerDTO {
+public class AuthController {
 
     //transfer user details like name, pw, email to the service
     @PostMapping("/signup")
