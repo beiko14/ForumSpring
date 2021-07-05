@@ -3,6 +3,7 @@ package com.example.demo.service;
 // create user object, save it to the db, sending activation e-mail
 
 import com.example.demo.controller.dto.RegisterRequest;
+import com.example.demo.model.NotificationEmail;
 import com.example.demo.model.User;
 import com.example.demo.model.VerificationToken;
 import com.example.demo.repository.UserRepository;
@@ -22,6 +23,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final MailService mailService;
 
     //create user and map data from RegisterRequest-object to User-object
     @Transactional
@@ -35,6 +37,10 @@ public class AuthService {
         userRepository.save(user);
 
         String randomToken = generateVerificationToken(user);
+        // subject, receiver, email-body
+        mailService.sendMail(new NotificationEmail("Activate your account",
+                user.getEmail(), "Please click on following link to activate your account: " +
+                "localhost:8080/api/auth/accountVerification" + randomToken));
     }
 
     private String generateVerificationToken(User user) {
