@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.NotificationEmail;
+import com.example.demo.exceptions.ForumSpringException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
