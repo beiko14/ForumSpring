@@ -3,6 +3,7 @@ package com.example.demo.service;
 // create user object, save it to the db, sending activation e-mail
 
 import com.example.demo.controller.dto.RegisterRequest;
+import com.example.demo.exceptions.ForumSpringException;
 import com.example.demo.model.NotificationEmail;
 import com.example.demo.model.User;
 import com.example.demo.model.VerificationToken;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,7 +42,7 @@ public class AuthService {
         // subject, receiver, email-body
         mailService.sendMail(new NotificationEmail("Activate your account",
                 user.getEmail(), "Please click on following link to activate your account: " +
-                "localhost:8080/api/auth/accountVerification" + randomToken));
+                "http://localhost:8080/api/auth/accountVerification/" + randomToken));
     }
 
     private String generateVerificationToken(User user) {
@@ -51,5 +53,20 @@ public class AuthService {
 
         verificationTokenRepository.save(verificationToken);
         return randomToken;
+    }
+
+    public void verifyAccount(String token) {
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
+        //if entity doesn't exists, throw exception:
+        verificationToken.orElseThrow(() -> new ForumSpringException("Invalid Token"));
+        fetchUserAndEnable(verificationToken.get());
+    }
+
+    @Transactional
+    private void fetchUserAndEnable(VerificationToken verificationToken) {
+        String username = verificationToken.getUser().getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ForumSpringException("username not found"));
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 }
