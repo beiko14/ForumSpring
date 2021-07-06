@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.controller.dto.AuthenticationResponse;
 import com.example.demo.controller.dto.RegisterRequest;
+import com.example.demo.controller.dto.LoginRequest;
 import com.example.demo.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,5 +30,14 @@ public class AuthController {
         return new ResponseEntity<>("Account activated successfully", HttpStatus.OK);
     }
 
+    @PostMapping("/login")
+    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest){
+        return authService.login(loginRequest);
+    }
+
 }
+
+
+
+
 

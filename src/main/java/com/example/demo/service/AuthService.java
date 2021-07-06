@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 // create user object, save it to the db, sending activation e-mail
 
+import com.example.demo.controller.dto.AuthenticationResponse;
+import com.example.demo.controller.dto.LoginRequest;
 import com.example.demo.controller.dto.RegisterRequest;
 import com.example.demo.exceptions.ForumSpringException;
 import com.example.demo.model.NotificationEmail;
@@ -9,7 +11,12 @@ import com.example.demo.model.User;
 import com.example.demo.model.VerificationToken;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.VerificationTokenRepository;
+import com.example.demo.security.JwtProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +33,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
     //create user and map data from RegisterRequest-object to User-object
     @Transactional
@@ -69,4 +78,25 @@ public class AuthService {
         user.setEnabled(true);
         userRepository.save(user);
     }
+
+    // implement the logic to authenticate the user
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword()));
+        //Store authentication object inside the security context
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtProvider.generateToken(authenticate);
+        return new AuthenticationResponse(token, loginRequest.getUsername());
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
