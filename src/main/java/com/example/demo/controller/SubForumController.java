@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.SubForumDto;
+import com.example.demo.model.SubForum;
 import com.example.demo.service.SubForumService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,14 @@ public class SubForumController {
     @GetMapping
     public ResponseEntity<List<SubForumDto>> getAllSubForums(){
         return ResponseEntity.status(HttpStatus.OK).body(subForumService.getAll());
+    }
+
+    // endpoint to receive a subforum based on the id
+    @GetMapping("/{id}")
+    public ResponseEntity<SubForumDto> getSubForum(@PathVariable Long id){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(subForumService.getSubForum(id));
     }
 
 }
