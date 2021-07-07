@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.controller.dto.AuthenticationResponse;
-import com.example.demo.controller.dto.RegisterRequest;
-import com.example.demo.controller.dto.LoginRequest;
+import com.example.demo.dto.AuthenticationResponse;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -2,9 +2,9 @@ package com.example.demo.service;
 
 // create user object, save it to the db, sending activation e-mail
 
-import com.example.demo.controller.dto.AuthenticationResponse;
-import com.example.demo.controller.dto.LoginRequest;
-import com.example.demo.controller.dto.RegisterRequest;
+import com.example.demo.dto.AuthenticationResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.exceptions.ForumSpringException;
 import com.example.demo.model.NotificationEmail;
 import com.example.demo.model.User;
