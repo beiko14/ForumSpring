@@ -86,7 +86,7 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
-			<scope>compile</scope>
+			<!-- <scope>compile</scope> -->
 		</dependency>
 	</dependencies>
 
